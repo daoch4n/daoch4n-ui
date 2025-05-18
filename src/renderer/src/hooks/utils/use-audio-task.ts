@@ -14,6 +14,7 @@ interface AudioTaskOptions {
   sliceLength: number
   displayText?: DisplayText | null
   expressions?: string[] | number[] | null
+  motions?: string[] | null  // Added motions field for body animations
   speaker_uid?: string
   forwarded?: boolean
 }
@@ -56,7 +57,7 @@ export const useAudioTask = () => {
       return;
     }
 
-    const { audioBase64, displayText, expressions, forwarded } = options;
+    const { audioBase64, displayText, expressions, motions, forwarded } = options;
 
     if (displayText) {
       appendText(displayText.text);
@@ -82,6 +83,19 @@ export const useAudioTask = () => {
     try {
       if (expressions?.[0] !== undefined) {
         model.expression(expressions[0]);
+
+        // Handle motion if available
+        if (motions?.[0] !== undefined) {
+          const motionName = motions[0];
+          console.log(`Starting motion: ${motionName}`);
+
+          // Check if model has motion method
+          if (model.motion) {
+            model.motion(motionName);
+          } else {
+            console.warn('Motion method not available on model');
+          }
+        }
       }
 
       let isFinished = false;
