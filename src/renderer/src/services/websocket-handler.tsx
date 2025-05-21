@@ -214,6 +214,7 @@ function WebSocketHandler({ children }: { children: React.ReactNode }) {
       case 'user-input-transcription':
         console.log('user-input-transcription: ', message.text);
         if (message.text) {
+          // Assuming message.text from backend already contains processed emojis
           appendHumanMessage(message.text);
         }
         break;
